@@ -29,7 +29,11 @@ class UserInfo(models.Model):
     userrole=models.CharField(max_length=50,null=True)
     category=models.CharField(max_length=20,null=True)
     level=models.CharField(max_length=20,null=True)
-  
+
+
+# class UserInfo_Perssion(models.Model):
+#     userinfo=models.OneToOneField(UserInfo)
+
 
 class Device(models.Model):
     devnum=models.CharField(verbose_name='资产编号',max_length=50,null=True)
@@ -290,6 +294,7 @@ class Threshold(models.Model):
     res16=models.CharField(max_length=20)
     res17=models.CharField(max_length=20)
     res18=models.CharField(max_length=20)
+   
   
 
     

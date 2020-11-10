@@ -8,7 +8,7 @@ from api.auth import JwtAuth
 from api.mypermission import MyPermission1
 from api.utils.jwt_auth import create_token
 from api.mypagination import MyPagination
-from django.db.models.aggregates import Count
+from django.db.models.aggregates import Count ,Max
 import requests
 import json
 from django.db.models import Q
@@ -25,8 +25,10 @@ class Login(APIView):
         user_obj=models.UserInfo.objects.filter(username=user,password=pwd).first()
         if not user_obj:
             return Response({'code':0,'msg':'用户名或密码错误'},headers={'Access-Control-Allow-Origin':'*'})
+        elif user_obj.category=='0':
+            return Response({'code':0,'msg':'该用户未经授权，无法登录'},headers={'Access-Control-Allow-Origin':'*'})
         token=create_token({'id':user_obj.pk,'username':user_obj.username,'company':user_obj.company,'userrole':user_obj.userrole},1)
-        return Response({'code':1,'msg':'登录成功','token':token},headers={'Access-Control-Allow-Origin':'*'})
+        return Response({'code':1,'msg':'登录成功','userrole':user_obj.userrole,'token':token},headers={'Access-Control-Allow-Origin':'*'})
 
 
 
@@ -42,10 +44,50 @@ class Userinfo(APIView):
     #修改个人信息接口
     def put(self,request ,*args, **kwagrs):
         userinfo_id=request.user['id']
-        models.UserInfo.objects.filter(id=userinfo_id).update(**request.data)
-        return Response('更新成功',headers={"Access-Control-Allow-Origin":"*"})
+        data=request.data
+        if 'username' in data:
+            data.pop('username')
+        models.UserInfo.objects.filter(id=userinfo_id).update(**data)
+        return Response('更新成功',headers={"Access-Control-Allow-Origin":"*"})                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
 
 
+
+
+class Departments(APIView):
+    authentication_classes=[JwtAuth]
+    def get(self,request,*args, **kwargs):
+        #获取本公司所有部门接口
+        mycompany=request.user['company']
+        queryset=models.Company.objects.filter(company=mycompany).first()
+        departments=queryset.department_set.values('id','department')
+        return Response(departments,headers={"Access-Control-Allow-Origin":"*"})
+
+    def post(self,request,*args, **kwargs):
+        mycompany=request.user['company']
+        mycompany_iddict=models.Company.objects.filter(company=mycompany).values('id').first()
+        mycompany_id=mycompany_iddict['id']
+        department=request.data.get('department')
+        queryset=models.Department.objects.filter(company_id=mycompany_id,department=department)
+        if queryset:
+             return Response({'code':0,'msg':'部门已存在，添加失败'},headers={"Access-Control-Allow-Origin":"*"})
+        models.Department.objects.create(department=department,company_id=mycompany_id)
+        return Response({'code':1,'msg':'部门添加成功'},headers={"Access-Control-Allow-Origin":"*"})
+
+    def delete(self,request,*args, **kwargs):
+        mycompany=request.user['company']
+        pk=kwargs.get('pk')
+        mycompany_iddict=models.Company.objects.filter(company=mycompany).values('id').first()
+        mycompany_id=mycompany_iddict['id']
+        queryset=models.Department.objects.filter(company_id=mycompany_id,id=pk).first()
+        if not queryset:
+            return Response({'code':0,'msg':'无此部门，删除失败'},headers={"Access-Control-Allow-Origin":"*"})
+        queryset.delete()
+        return Response({'code':1,'msg':'部门删除成功'},headers={"Access-Control-Allow-Origin":"*"})
+
+class Register(APIView):
+    def post(self,request,*args, **kwargs):
+        pass
+        
 
 
 class UserList(APIView):
@@ -54,7 +96,6 @@ class UserList(APIView):
     #管理员获取本公司所有用户信息
     def get(self,request,*args, **kwargs):
         pk=kwargs.get('pk')
-        print(pk)
         mycompany=request.user['company']
         mydepartment=request.GET.get('department')
         myusername=request.GET.get('username')
@@ -78,7 +119,6 @@ class UserList(APIView):
         
 
     def post(self,request,*args, **kwargs):
-        mycompany=request.user['company']
         data=request.data
         queryset=models.UserInfo.objects.filter(username=data['username']).first()
         if queryset:
@@ -89,6 +129,9 @@ class UserList(APIView):
 
     def put(self,request,*args, **kwargs):
         pk=kwargs.get('pk')
+        data=request.data
+        if 'username' in data:
+            data.pop('username')
         models.UserInfo.objects.filter(id=pk).update(**request.data)
         return Response({'code':1,'msg':'更新成功'},headers={'Access-Control-Allow-Origin':'*'})
 
@@ -98,8 +141,26 @@ class UserList(APIView):
         return Response({'code':1,'msg':'删除成功'},headers={'Access-Control-Allow-Origin':'*'})
 
 
-           
+class UnauthorizedUsers(APIView):
+    authentication_classes=[JwtAuth]
+    permission_classes=[MyPermission1]
+    #后台获取未经授权的用户列表
+    def get(self,request,*args, **kwargs):
+        queryset=models.UserInfo.objects.filter(category='0').all()
+        ser=serializer.UserInfoSerializer(queryset,many=True)
+        return Response(ser.data,headers={"Access-Control-Allow-Origin":"*"})
         
+        
+class AuthorizedUsers(APIView):
+    authentication_classes=[JwtAuth]
+    permission_classes=[MyPermission1]
+    #后台获取已经授权的用户列表
+    def get(self,request,*args, **kwargs):
+        queryset=models.UserInfo.objects.filter(category='1').all()
+        ser=serializer.UserInfoSerializer(queryset,many=True)
+        return Response(ser.data,headers={"Access-Control-Allow-Origin":"*"})
+
+
 
 class Device(APIView):
     authentication_classes=[JwtAuth]
@@ -140,13 +201,14 @@ class Device(APIView):
     def put(self,request ,*args, **kwagrs):
         pk=kwagrs.get('pk')
         userinfo_id=request.user['id']
+        data=request.data
         if userinfo_id==1:
             dev_obj=models.Device.objects.filter(id=pk).first()
         else:
             dev_obj=models.Device.objects.filter(userinfo_id=userinfo_id, id=pk).first()
         if not dev_obj:
             return Response({'code':0,'msg':'设备id参数错误，更新失败'},headers={"Access-Control-Allow-Origin":"*"})
-        models.Device.objects.filter(id=pk).update(**request.data)
+        dev_obj.update(**data)
         return Response({'code':1,'msg':'更新成功'},headers={"Access-Control-Allow-Origin":"*"}) 
 
     def delete(self,request ,*args, **kwagrs):
@@ -166,6 +228,7 @@ class Device(APIView):
 
 class Cncstates(APIView):
     authentication_classes=[JwtAuth]
+    #统计个人所有设备的状态
     def get(self,request,*args, **kwargs):
         userinfo_id=request.user['id']
         if userinfo_id==1:
@@ -180,13 +243,21 @@ class FailureWarning(APIView):
     def get(self,request,*args, **kwargs):
         userinfo_id=request.user['id']
         if userinfo_id==1:
-            pass
+            queryset=models.Shuju.objects.values('devtype').annotate(max1=Max('id'))
+            b=[y['max1'] for y in queryset]
+            queryset=models.Shuju.objects.filter(id__in=b).all().values('id','devtype','alarmnum')
+            return Response(queryset,headers={"Access-Control-Allow-Origin":"*"})
         else:
-            
-
+            devtypes=models.Device.objects.filter(userinfo_id=userinfo_id).all().values('devtype')
+            a=[x['devtype'] for x in devtypes]
+            queryset=models.Shuju.objects.filter(devtype__in=a).values('devtype').annotate(max1=Max('id'))
+            b=[y['max1'] for y in queryset]
+            queryset=models.Shuju.objects.filter(id__in=b).all().values('id','devtype','alarmnum')
+            return Response(queryset,headers={"Access-Control-Allow-Origin":"*"})
 
 class Cameraaddress(APIView):
     authentication_classes=[JwtAuth]
+    #获取摄像头监控地址
     def get(self,request,*args, **kwargs):
         pk=kwargs.get('pk')
         userinfo_id=request.user['id']
@@ -216,7 +287,8 @@ class Shuju(APIView):
         if not devtype:
             return Response('请求参数错误',headers={"Access-Control-Allow-Origin":"*"})
         else:
-            queryset=models.Shuju.objects.filter(devtype=devtype).last()
+            queryset=models.Shuju.objects.filter(devtype=devtype).order_by('-id').first()
+            print(queryset.query)
             ser=serializer.ShujuSerializer(queryset)
             return Response(ser.data,headers={"Access-Control-Allow-Origin":"*"})
 

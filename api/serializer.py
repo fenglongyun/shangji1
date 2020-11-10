@@ -1,6 +1,14 @@
 from rest_framework import serializers
 from api import models
 
+
+
+class DepartmentsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=models.Department
+        fields='__all__'
+
+
 class UserInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model=models.UserInfo
