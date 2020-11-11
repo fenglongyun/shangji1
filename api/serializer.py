@@ -14,6 +14,10 @@ class UserInfoSerializer(serializers.ModelSerializer):
         model=models.UserInfo
         fields='__all__'
 
+class MenuSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=models.Menu
+        fields='__all__'
 
 class DeviceSerializer(serializers.ModelSerializer):
     class Meta:

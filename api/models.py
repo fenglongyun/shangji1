@@ -29,10 +29,29 @@ class UserInfo(models.Model):
     userrole=models.CharField(max_length=50,null=True)
     category=models.CharField(max_length=20,null=True)
     level=models.CharField(max_length=20,null=True)
+    avatar=models.CharField(max_length=100,null=True)
 
 
-# class UserInfo_Perssion(models.Model):
-#     userinfo=models.OneToOneField(UserInfo)
+
+class Menu(models.Model):
+    name=models.CharField(verbose_name='菜单名称',max_length=20,null=True)
+    level=models.IntegerField(verbose_name='菜单级别',null=True)
+    parent=models.ForeignKey('self',related_name='subs',null=True,blank=True,on_delete=models.CASCADE)
+    lable=models.CharField(verbose_name='标签',max_length=20,null=True)
+    path=models.CharField(verbose_name='路由',max_length=100,null=True)
+    component=models.CharField(verbose_name='组件',max_length=20,null=True)
+    icon=models.CharField(verbose_name='图标',max_length=20,null=True)
+    hidden=models.BooleanField(verbose_name='是否隐藏',default=False)
+
+class UserInfo_Menu(models.Model):
+    userinfo=models.ForeignKey('UserInfo',on_delete=models.CASCADE)
+    menu=models.ForeignKey('Menu',on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together=[('userinfo','menu'),]
+
+
+
 
 
 class Device(models.Model):

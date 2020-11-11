@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'userlist/(?P<pk>\w+)/$',views.UserList.as_view()),
     url(r'authorizedusers/$',views.AuthorizedUsers.as_view()),
     url(r'unauthorizedusers/$',views.UnauthorizedUsers.as_view()),
+    url(r'menulist/$',views.Menulist.as_view()),
     url(r'device/$', views.Device.as_view()),
     url(r'device/(?P<pk>\w+)/$', views.Device.as_view()),
     url(r'failurewarning/$',views.FailureWarning.as_view()),

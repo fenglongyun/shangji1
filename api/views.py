@@ -84,16 +84,12 @@ class Departments(APIView):
         queryset.delete()
         return Response({'code':1,'msg':'部门删除成功'},headers={"Access-Control-Allow-Origin":"*"})
 
-class Register(APIView):
-    def post(self,request,*args, **kwargs):
-        pass
-        
 
 
 class UserList(APIView):
     authentication_classes=[JwtAuth]
     permission_classes=[MyPermission1]
-    #管理员获取本公司所有用户信息
+    #前台管理员获取本公司所有用户信息
     def get(self,request,*args, **kwargs):
         pk=kwargs.get('pk')
         mycompany=request.user['company']
@@ -160,6 +156,15 @@ class AuthorizedUsers(APIView):
         ser=serializer.UserInfoSerializer(queryset,many=True)
         return Response(ser.data,headers={"Access-Control-Allow-Origin":"*"})
 
+
+class Menulist(APIView):
+    authentication_classes=[JwtAuth]
+    permission_classes=[MyPermission1]
+    # 后台获取菜单列表
+    def get(self,request,*args, **kwargs):
+        queryset=models.Menu.objects.all()
+        ser=serializer.MenuSerializer(queryset,many=True)
+        return Response(ser.data,headers={"Access-Control-Allow-Origin":"*"})
 
 
 class Device(APIView):
@@ -288,7 +293,6 @@ class Shuju(APIView):
             return Response('请求参数错误',headers={"Access-Control-Allow-Origin":"*"})
         else:
             queryset=models.Shuju.objects.filter(devtype=devtype).order_by('-id').first()
-            print(queryset.query)
             ser=serializer.ShujuSerializer(queryset)
             return Response(ser.data,headers={"Access-Control-Allow-Origin":"*"})
 
