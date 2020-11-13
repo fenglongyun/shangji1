@@ -266,12 +266,11 @@ class BaoJing(APIView):
             devtypes=models.Device.objects.all().values('devtype')
             c=[y['devtype'] for y in devtypes]
         else:
-            devtypes=models.Device.objects.filter(userinfo_id=userinfo_id).all().values('devtype')
+            devtypes=models.Device.objects.filter(userinfo_id=userinfo_id).values('devtype')
             c=[y['devtype'] for y in devtypes]
         max_ids=models.Shuju.objects.filter(devtype__in=c).values('devtype').annotate(max1=Max('id'))
         b=[y['max1'] for y in max_ids]
         queryset=models.Shuju.objects.filter(id__in=b).values('id','devtype','alarmnum','DOCH0','DOCH1','DOCH2','DOCH3','DOCH4')
-        
         for x in queryset:
             cgqbj=x['DOCH0'] or  x['DOCH1'] or x['DOCH2'] or x['DOCH3'] or x['DOCH4']
             cncbj=x['alarmnum']
@@ -284,15 +283,10 @@ class BaoJing(APIView):
             else:
                 x['alarmnum']='正常'
         ser=serializer.BaoJingSerializer(queryset,many=True)
-        return Response(queryset,headers={"Access-Control-Allow-Origin":"*"})
+        return Response(ser.data,headers={"Access-Control-Allow-Origin":"*"})
         
 
             
-
-
-
-
-
 class FailureWarning(APIView):
     authentication_classes=[JwtAuth]
     def get(self,request,*args, **kwargs):

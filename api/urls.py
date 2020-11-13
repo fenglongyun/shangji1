@@ -22,4 +22,8 @@ urlpatterns = [
     url(r'^unauthorizedusers/$',adminviews.UnauthorizedUsers.as_view()),
     url(r'^menulist/$',adminviews.Menulist.as_view()),
     url(r'^menutree/$',adminviews.Menutree.as_view()),
+    url(r'^userauthorization/(?P<pk>\d+)/$', adminviews.UserAuthorization.as_view()),
+    url(r'^usermenus/(?P<pk>\d+)/$', adminviews.UserMenus.as_view()),
+
+
 ]

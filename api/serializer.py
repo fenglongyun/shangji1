@@ -55,4 +55,4 @@ class BaoJingSerializer(serializers.ModelSerializer):
     
     class Meta:
         model=models.Shuju
-        fields=['id','devtype','alarmnum','devnum']
+        fields=['id','devtype','alarmnum']
