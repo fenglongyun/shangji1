@@ -60,6 +60,7 @@ class UserAuthorization(APIView):
         pk=kwargs.get('pk')
         user_obj=models.UserInfo.objects.filter(id=pk).first()
         user_obj.category=1
+        user_obj.userrole=2
         user_obj.save()
         data=request.data
         user_menu_objs=[]

@@ -4,6 +4,7 @@ from api.views import adminviews,indexviews
 urlpatterns = [
     url(r'login/$', indexviews.Login.as_view()),
     url(r'register/$', indexviews.Register.as_view()),
+    url(r'getmenutree/$', indexviews.GetMenuTree.as_view()),
     url(r'companysdepartments/$',indexviews.CompanysDepartments.as_view()),
     url(r'userinfo/$',indexviews.Userinfo.as_view()),
     url(r'departments/$',indexviews.Departments.as_view()),

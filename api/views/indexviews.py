@@ -49,7 +49,27 @@ class Register(APIView):
         else:
             return Response({'code':0,'msg':'用户名或密码不能为空'},headers={'Access-Control-Allow-Origin':'*'})
 
-            
+
+class GetMenuTree(APIView):
+    authentication_classes=[JwtAuth]
+    def get(self,request,*args, **kwargs):
+        userinfo_id=request.user['id']
+        menus_list=models.UserInfo_Menu.objects.filter(userinfo_id=userinfo_id).values('menu_id')
+        a=[x['menu_id'] for x in menus_list]
+        queryset=models.Menu.objects.filter(id__in=a).all().order_by('id')
+        ser=serializer.MenuSerializer(queryset,many=True)
+        list1=ser.data
+        level1=0
+        for x in reversed(list1):
+            x['children']=[]
+            if x['level']==1:
+                level1+=1
+            for y in reversed(list1):
+                if y['parent']==x['id']:
+                    x['children'].append(y)
+        list2=list1[0:level1]
+        return Response(list2,headers={"Access-Control-Allow-Origin":"*"})
+
         
 
 
