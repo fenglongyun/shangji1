@@ -1,20 +1,25 @@
 from django.conf.urls import url
-from api import views
+from api.views import adminviews,indexviews
 
 urlpatterns = [
-    url(r'login/$', views.Login.as_view()),
-    url(r'userinfo/$',views.Userinfo.as_view()),
-    url(r'departments/$',views.Departments.as_view()),
-    url(r'departments/(?P<pk>\w+)/$',views.Departments.as_view()),
-    url(r'userlist/$',views.UserList.as_view()),
-    url(r'userlist/(?P<pk>\w+)/$',views.UserList.as_view()),
-    url(r'authorizedusers/$',views.AuthorizedUsers.as_view()),
-    url(r'unauthorizedusers/$',views.UnauthorizedUsers.as_view()),
-    url(r'menulist/$',views.Menulist.as_view()),
-    url(r'device/$', views.Device.as_view()),
-    url(r'device/(?P<pk>\w+)/$', views.Device.as_view()),
-    url(r'failurewarning/$',views.FailureWarning.as_view()),
-    url(r'cncstates/$',views.Cncstates.as_view()),
-    url(r'cameraaddress/(?P<pk>\w+)/$',views.Cameraaddress.as_view()),
-    url(r'shuju/(?P<devtype>\w+-\w+)/$', views.Shuju.as_view()),
+    url(r'login/$', indexviews.Login.as_view()),
+    url(r'register/$', indexviews.Register.as_view()),
+    url(r'companysdepartments/$',indexviews.CompanysDepartments.as_view()),
+    url(r'userinfo/$',indexviews.Userinfo.as_view()),
+    url(r'departments/$',indexviews.Departments.as_view()),
+    url(r'departments/(?P<pk>\w+)/$',indexviews.Departments.as_view()),
+    url(r'userlist/$',indexviews.UserList.as_view()),
+    url(r'userlist/(?P<pk>\w+)/$',indexviews.UserList.as_view()),
+    url(r'device/$', indexviews.Device.as_view()),
+    url(r'device/(?P<pk>\w+)/$', indexviews.Device.as_view()),
+    url(r'failurewarning/$',indexviews.FailureWarning.as_view()),
+    url(r'baojing/$',indexviews.BaoJing.as_view()),
+    url(r'cncstates/$',indexviews.Cncstates.as_view()),
+    url(r'cameraaddress/(?P<pk>\w+)/$',indexviews.Cameraaddress.as_view()),
+    url(r'shuju/(?P<devtype>\w+-\w+)/$', indexviews.Shuju.as_view()),
+    
+    url(r'^authorizedusers/$',adminviews.AuthorizedUsers.as_view()),
+    url(r'^unauthorizedusers/$',adminviews.UnauthorizedUsers.as_view()),
+    url(r'^menulist/$',adminviews.Menulist.as_view()),
+    url(r'^menutree/$',adminviews.Menutree.as_view()),
 ]

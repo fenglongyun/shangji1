@@ -313,6 +313,8 @@ class Threshold(models.Model):
     res16=models.CharField(max_length=20)
     res17=models.CharField(max_length=20)
     res18=models.CharField(max_length=20)
+
+
    
   
 
