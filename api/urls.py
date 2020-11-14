@@ -1,5 +1,6 @@
 from django.conf.urls import url
-from api.views import adminviews,indexviews
+from api.views import indexviews
+from api.views.admin import account
 
 urlpatterns = [
     url(r'login/$', indexviews.Login.as_view()),
@@ -19,12 +20,10 @@ urlpatterns = [
     url(r'cameraaddress/(?P<pk>\w+)/$',indexviews.Cameraaddress.as_view()),
     url(r'shuju/(?P<devtype>\w+-\w+)/$', indexviews.Shuju.as_view()),
     
-    url(r'^authorizedusers/$',adminviews.AuthorizedUsers.as_view()),
-    url(r'^unauthorizedusers/$',adminviews.UnauthorizedUsers.as_view()),
-    url(r'^menulist/$',adminviews.Menulist.as_view()),
-    url(r'^menutree/$',adminviews.Menutree.as_view()),
-    url(r'^userauthorization/(?P<pk>\d+)/$', adminviews.UserAuthorization.as_view()),
-    url(r'^usermenus/(?P<pk>\d+)/$', adminviews.UserMenus.as_view()),
-
-
+    url(r'^authorizedusers/$',account.AuthorizedUsers.as_view()),
+    url(r'^unauthorizedusers/$',account.UnauthorizedUsers.as_view()),
+    url(r'^menulist/$',account.Menulist.as_view()),
+    url(r'^menutree/$',account.Menutree.as_view()),
+    url(r'^userauthorization/(?P<pk>\d+)/$', account.UserAuthorization.as_view()),
+    url(r'^usermenus/(?P<pk>\d+)/$', account.UserMenus.as_view()),
 ]

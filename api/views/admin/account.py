@@ -14,8 +14,7 @@ class UnauthorizedUsers(APIView):
         queryset=models.UserInfo.objects.filter(category='0').all()
         ser=serializer.UserInfoSerializer(queryset,many=True)
         return Response(ser.data,headers={"Access-Control-Allow-Origin":"*"})
-        
-        
+           
 class AuthorizedUsers(APIView):
     authentication_classes=[JwtAuth]
     permission_classes=[MyPermission1]
@@ -24,7 +23,6 @@ class AuthorizedUsers(APIView):
         queryset=models.UserInfo.objects.filter(category='1').all()
         ser=serializer.UserInfoSerializer(queryset,many=True)
         return Response(ser.data,headers={"Access-Control-Allow-Origin":"*"})
-
 
 class Menulist(APIView):
     authentication_classes=[JwtAuth]
@@ -51,7 +49,6 @@ class Menutree(APIView):
         list2=[list1[0],list1[1],list1[2]]
         return Response(list2,headers={"Access-Control-Allow-Origin":"*"})
 
-
 class UserAuthorization(APIView):
     authentication_classes=[JwtAuth]
     permission_classes=[MyPermission1]
@@ -69,9 +66,6 @@ class UserAuthorization(APIView):
         models.UserInfo_Menu.objects.bulk_create(user_menu_objs)
         return Response({'code':1,'msg':'授权成功'},headers={"Access-Control-Allow-Origin":"*"})
     
-    
-
-
 class UserMenus(APIView):
     authentication_classes=[JwtAuth]
     permission_classes=[MyPermission1]
