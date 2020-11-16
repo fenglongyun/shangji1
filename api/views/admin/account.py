@@ -14,6 +14,18 @@ class UnauthorizedUsers(APIView):
         queryset=models.UserInfo.objects.filter(category='0').all()
         ser=serializer.UserInfoSerializer(queryset,many=True)
         return Response(ser.data,headers={"Access-Control-Allow-Origin":"*"})
+
+class UnauthorizedUser(APIView):
+    authentication_classes=[JwtAuth]
+    permission_classes=[MyPermission1]
+    ###删除一个未授权用户
+    def delete(self,request,*args, **kwargs):
+        pk = kwargs.get('pk')
+        models.UserInfo.objects.filter(id=pk).delete()
+        return Response({
+            "code" : 3000,
+            "msg" : '删除成功',
+        })
            
 class AuthorizedUsers(APIView):
     authentication_classes=[JwtAuth]
@@ -24,6 +36,17 @@ class AuthorizedUsers(APIView):
         ser=serializer.UserInfoSerializer(queryset,many=True)
         return Response(ser.data,headers={"Access-Control-Allow-Origin":"*"})
 
+class AuthorizedUser(APIView):
+    authentication_classes=[JwtAuth]
+    permission_classes=[MyPermission1]
+    ###删除一个授权用户
+    def delete(self,request,*args, **kwargs):
+        pk = kwargs.get('pk')
+        models.UserInfo.objects.filter(id=pk).delete()
+        return Response({
+            "code" : 3000,
+            "msg" : '删除成功',
+        })   
 class Menulist(APIView):
     authentication_classes=[JwtAuth]
     permission_classes=[MyPermission1]
@@ -62,7 +85,7 @@ class UserAuthorization(APIView):
         data=request.data
         user_menu_objs=[]
         for x in data:
-            user_menu_objs.append(models.UserInfo_Menu(userinfo_id=pk,menu_id=x['menu_id']))
+            user_menu_objs.append(models.UserInfo_Menu(userinfo_id=pk,menu_id=x))
         models.UserInfo_Menu.objects.bulk_create(user_menu_objs)
         return Response({'code':1,'msg':'授权成功'},headers={"Access-Control-Allow-Origin":"*"})
     
@@ -83,7 +106,7 @@ class UserMenus(APIView):
         data=request.data
         user_menu_objs=[]
         for x in data:
-            user_menu_objs.append(models.UserInfo_Menu(userinfo_id=pk,menu_id=x['menu_id']))
+            user_menu_objs.append(models.UserInfo_Menu(userinfo_id=pk,menu_id=x))
         models.UserInfo_Menu.objects.bulk_create(user_menu_objs)
         return Response({'code':1,'msg':'菜单权限修改成功'},headers={"Access-Control-Allow-Origin":"*"})
 

@@ -21,7 +21,9 @@ urlpatterns = [
     url(r'shuju/(?P<devtype>\w+-\w+)/$', indexviews.Shuju.as_view()),
     
     url(r'^authorizedusers/$',account.AuthorizedUsers.as_view()),
+    url(r'^authorizeduser/(?P<pk>\d+)/$',account.AuthorizedUser.as_view()),
     url(r'^unauthorizedusers/$',account.UnauthorizedUsers.as_view()),
+    url(r'^unauthorizedUser/(?P<pk>\d+)/$',account.UnauthorizedUser.as_view()),
     url(r'^menulist/$',account.Menulist.as_view()),
     url(r'^menutree/$',account.Menutree.as_view()),
     url(r'^userauthorization/(?P<pk>\d+)/$', account.UserAuthorization.as_view()),
