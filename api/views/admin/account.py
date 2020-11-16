@@ -32,13 +32,26 @@ class AuthorizedUsers(APIView):
     permission_classes=[MyPermission1]
     #后台获取已经授权的用户列表
     def get(self,request,*args, **kwargs):
-        queryset=models.UserInfo.objects.filter(category='1').all()
+        res = request.GET.get("username")
+        if res:
+            #模糊搜索
+            queryset=models.UserInfo.objects.filter(category='1',username__contains=res).all()
+        else:
+            queryset=models.UserInfo.objects.filter(category='1').all()
         ser=serializer.UserInfoSerializer(queryset,many=True)
         return Response(ser.data,headers={"Access-Control-Allow-Origin":"*"})
 
 class AuthorizedUser(APIView):
     authentication_classes=[JwtAuth]
     permission_classes=[MyPermission1]
+    def put(self,request,*args, **kwargs):
+        pk = kwargs.get('pk')
+        data = request.data
+        models.UserInfo.objects.filter(id = pk).update(**data)
+        return Response({
+            "code" : 2000,
+            "msg" : "修改成功"
+        })
     ###删除一个授权用户
     def delete(self,request,*args, **kwargs):
         pk = kwargs.get('pk')
@@ -110,7 +123,4 @@ class UserMenus(APIView):
         models.UserInfo_Menu.objects.bulk_create(user_menu_objs)
         return Response({'code':1,'msg':'菜单权限修改成功'},headers={"Access-Control-Allow-Origin":"*"})
 
-
-
-
-    
+  
