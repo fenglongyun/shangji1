@@ -22,6 +22,7 @@ urlpatterns = [
     
     url(r'^authorizedusers/$',account.AuthorizedUsers.as_view()),
     url(r'^authorizeduser/(?P<pk>\d+)/$',account.AuthorizedUser.as_view()),
+    url(r'^authorizeduser/$',account.AuthorizedUser.as_view()),
     url(r'^unauthorizedusers/$',account.UnauthorizedUsers.as_view()),
     url(r'^unauthorizedUser/(?P<pk>\d+)/$',account.UnauthorizedUser.as_view()),
     url(r'^menulist/$',account.Menulist.as_view()),

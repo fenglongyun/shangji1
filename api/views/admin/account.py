@@ -44,6 +44,7 @@ class AuthorizedUsers(APIView):
 class AuthorizedUser(APIView):
     authentication_classes=[JwtAuth]
     permission_classes=[MyPermission1]
+    #修改一个用户信息
     def put(self,request,*args, **kwargs):
         pk = kwargs.get('pk')
         data = request.data
@@ -59,7 +60,27 @@ class AuthorizedUser(APIView):
         return Response({
             "code" : 3000,
             "msg" : '删除成功',
-        })   
+        })
+    
+    #新增一个授权用户
+    def post(self,request,*args, **kwargs):
+        info = request.data.get("info")
+        if models.UserInfo.objects.filter(username = info['username']).all():
+            return Response({
+                "code" : 0,
+                "msg" : "新增失败，账号已存在"
+            })
+        obj = models.UserInfo.objects.create(**info)
+        auth = request.data.get("auth")
+        user_menu_objs=[]
+        for x in auth:
+            user_menu_objs.append(models.UserInfo_Menu(userinfo_id=obj.id,menu_id=x))
+        models.UserInfo_Menu.objects.bulk_create(user_menu_objs)
+        return Response({
+            "code" : 1,
+            "msg" : "添加成功",
+        })
+
 class Menulist(APIView):
     authentication_classes=[JwtAuth]
     permission_classes=[MyPermission1]
