@@ -14,7 +14,11 @@ class UnauthorizedUsers(APIView):
         queryset=models.UserInfo.objects.filter(category='0').all()
         ser=serializer.UserInfoSerializer(queryset,many=True)
         return Response(ser.data,headers={"Access-Control-Allow-Origin":"*"})
+<<<<<<< HEAD:api/views/admin/account.py
         
+=======
+
+>>>>>>> 7f6bd5141e3b4b0485fc35bba04f0ebea7f5096e:api/views/adminviews.py
 class UnauthorizedUser(APIView):
     authentication_classes=[JwtAuth]
     permission_classes=[MyPermission1]
@@ -26,7 +30,11 @@ class UnauthorizedUser(APIView):
             "code" : 3000,
             "msg" : '删除成功',
         })
+<<<<<<< HEAD:api/views/admin/account.py
 
+=======
+           
+>>>>>>> 7f6bd5141e3b4b0485fc35bba04f0ebea7f5096e:api/views/adminviews.py
 class AuthorizedUsers(APIView):
     authentication_classes=[JwtAuth]
     permission_classes=[MyPermission1]
@@ -145,7 +153,11 @@ class UserMenus(APIView):
         models.UserInfo_Menu.objects.bulk_create(user_menu_objs)
         return Response({'code':1,'msg':'菜单权限修改成功'},headers={"Access-Control-Allow-Origin":"*"})
 
+<<<<<<< HEAD:api/views/admin/account.py
 
     
 
     
+=======
+  
+>>>>>>> 7f6bd5141e3b4b0485fc35bba04f0ebea7f5096e:api/views/adminviews.py
