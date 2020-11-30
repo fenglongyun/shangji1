@@ -38,7 +38,10 @@ class Register(APIView):
         pwd2=data.get('checkpassword')
         if user and pwd1 and pwd2:
             if pwd1 != pwd2:
-                return Response({'code':0,'msg':'两次输入密码不一致'},headers={'Access-Control-Allow-Origin':'*'})
+                return Response({
+                    'code':0,
+                    'msg':'两次输入密码不一致'
+                    },headers={'Access-Control-Allow-Origin':'*'})
             data.pop('checkpassword')
             queryset=models.UserInfo.objects.filter(username=user).first()
             if queryset:
@@ -69,11 +72,6 @@ class GetMenuTree(APIView):
                     x['children'].append(y)
         list2=list1[0:level1]
         return Response(list2,headers={"Access-Control-Allow-Origin":"*"})
-
-        
-
-
-
 
 class CompanysDepartments(APIView):
     def get(self,request,*args, **kwargs):
@@ -272,9 +270,9 @@ class Cncstates(APIView):
     def get(self,request,*args, **kwargs):
         userinfo_id=request.user['id']
         if userinfo_id==1:
-            dev_objs=models.Device.objects.all().values("cncstate").annotate(Count('id'))
+            devobjs=models.Device.objects.all().values("cncstate").annotate(Count('id'))
         else:
-            dev_objs=models.Device.objects.filter(userinfo_id=userinfo_id).values("cncstate").annotate(Count('id'))
+            devobjs=models.Device.objects.filter(userinfo_id=userinfo_id).values("cncstate").annotate(Count('id'))
         return Response({'code':1,'msg':dev_objs},headers={"Access-Control-Allow-Origin":"*"})
 
 
