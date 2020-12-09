@@ -273,7 +273,7 @@ class Cncstates(APIView):
             devobjs=models.Device.objects.all().values("cncstate").annotate(Count('id'))
         else:
             devobjs=models.Device.objects.filter(userinfo_id=userinfo_id).values("cncstate").annotate(Count('id'))
-        return Response({'code':1,'msg':dev_objs},headers={"Access-Control-Allow-Origin":"*"})
+        return Response({'code':1,'msg':devobjs},headers={"Access-Control-Allow-Origin":"*"})
 
 
 class BaoJing(APIView):
