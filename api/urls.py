@@ -29,4 +29,6 @@ urlpatterns = [
     url(r'^menutree/$',account.Menutree.as_view()),
     url(r'^userauthorization/(?P<pk>\d+)/$', account.UserAuthorization.as_view()),
     url(r'^usermenus/(?P<pk>\d+)/$', account.UserMenus.as_view()),
+    url(r'shujuTest/(?P<pk>\d+)/$', indexviews.ShujuTest.as_view()),
+
 ]

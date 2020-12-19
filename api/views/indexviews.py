@@ -12,7 +12,7 @@ from django.db.models.aggregates import Count ,Max
 import requests
 import json
 from django.db.models import Q
-
+from django.db.models import Max,Min
 
 
     
@@ -359,6 +359,18 @@ class Shuju(APIView):
             queryset=models.Shuju.objects.filter(devtype=devtype).order_by('-id').first()
             ser=serializer.ShujuSerializer(queryset)
             return Response(ser.data,headers={"Access-Control-Allow-Origin":"*"})
+
+
+class ShujuTest (APIView):
+    def  get(self,request ,*args, **kwagrs):
+         pk=kwargs.get('pk')
+         if not pk:
+            queryset=models.Shuju.objects.filter(id__gt=Max('id') - 10).order_by('id')
+            ser=serializer.ShujuSerializer(queryset)
+            return Response(ser.data,headers={"Access-Control-Allow-Origin":"*"})
+        
+         
+
 
     # def post(self,request ,*args, **kwagrs):
     #     data=request.data

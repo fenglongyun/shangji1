@@ -97,10 +97,10 @@ WSGI_APPLICATION = 'shangji.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'rr',
-        'USER':'root',
-        'PASSWORD':'123456',
-        'HOST':'127.0.0.1',
+        'NAME': 'labview',
+        'USER':'user',
+        'PASSWORD':'USSTcyl205@812$%',
+        'HOST':'118.25.152.184',
         'PORT':'3306',
     }
 }
