@@ -103,7 +103,7 @@ class Menutree(APIView):
             for y in reversed(list1):
                 if y['parent']==x['id']:
                     x['children'].append(y)
-        list2=[list1[0],list1[1],list1[2]]
+        list2 = filter(lambda e:not e["parent"],list1)
         return Response(list2,headers={"Access-Control-Allow-Origin":"*"})
 
 class UserAuthorization(APIView):
