@@ -1,6 +1,7 @@
 from django.conf.urls import url
 from api.views import indexviews
 from api.views.admin import account
+from api.views.admin.digitalCockpit import workbench
 
 urlpatterns = [
     url(r'login/$', indexviews.Login.as_view()),
