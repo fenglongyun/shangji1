@@ -25,7 +25,7 @@ SECRET_KEY = 'm*3%&&b=em06o=hk3_5k*-+3zx^rvp1*jn*b$e&(s%7*qiikxg'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -97,10 +97,10 @@ WSGI_APPLICATION = 'shangji.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'rr',
-        'USER':'root',
-        'PASSWORD':'123456',
-        'HOST':'127.0.0.1',
+        'NAME': 'labview',
+        'USER':'user',
+        'PASSWORD':'USSTcyl205@812$%',
+        'HOST':'118.25.152.184',
         'PORT':'3306',
     }
 }

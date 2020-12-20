@@ -14,7 +14,7 @@ class UnauthorizedUsers(APIView):
         queryset=models.UserInfo.objects.filter(category='0').all()
         ser=serializer.UserInfoSerializer(queryset,many=True)
         return Response(ser.data,headers={"Access-Control-Allow-Origin":"*"})
-
+        
 class UnauthorizedUser(APIView):
     authentication_classes=[JwtAuth]
     permission_classes=[MyPermission1]
@@ -26,7 +26,7 @@ class UnauthorizedUser(APIView):
             "code" : 3000,
             "msg" : '删除成功',
         })
-           
+
 class AuthorizedUsers(APIView):
     authentication_classes=[JwtAuth]
     permission_classes=[MyPermission1]
@@ -114,7 +114,7 @@ class UserAuthorization(APIView):
         pk=kwargs.get('pk')
         user_obj=models.UserInfo.objects.filter(id=pk).first()
         user_obj.category=1
-        user_obj.userrole=2
+        user_obj.userrole="2"
         user_obj.save()
         data=request.data
         user_menu_objs=[]
@@ -130,7 +130,8 @@ class UserMenus(APIView):
     def get(self,request,*args, **kwargs):
         pk=kwargs.get('pk')
         menus_list=models.UserInfo_Menu.objects.filter(userinfo_id=pk).values('menu_id')
-        return Response(menus_list,headers={"Access-Control-Allow-Origin":"*"})
+        c=[x['menu_id'] for x in menus_list]
+        return Response(c,headers={"Access-Control-Allow-Origin":"*"})
     
     #后台修改某用户菜单权限
     def put(self,request,*args, **kwargs):
@@ -143,5 +144,3 @@ class UserMenus(APIView):
             user_menu_objs.append(models.UserInfo_Menu(userinfo_id=pk,menu_id=x))
         models.UserInfo_Menu.objects.bulk_create(user_menu_objs)
         return Response({'code':1,'msg':'菜单权限修改成功'},headers={"Access-Control-Allow-Origin":"*"})
-
-  

@@ -97,7 +97,17 @@ class Device(models.Model):
     iotstate=models.CharField(verbose_name='IOT设备状态',max_length=50,null=True,blank=True)
     cameranum=models.CharField(verbose_name='摄像头设备号',max_length=50,null=True,blank=True)
     userinfo=models.ForeignKey("UserInfo",on_delete=models.CASCADE)
-    
+    iotmac=models.CharField(verbose_name='iot的mac地址',max_length=50,null=True)
+    simnum=models.CharField(verbose_name='sim卡号',max_length=50,null=True)
+    iotmanufacturernum=models.CharField(verbose_name='iot厂家编号',max_length=50,null=True)
+    lastmaintendate=models.CharField(max_length=50,null=True)
+    maintenancetime=models.CharField(max_length=50,null=True)
+    maintenancemethod=models.CharField(max_length=50,null=True)
+    maintainer=models.CharField(max_length=50,null=True)
+    maintencontent=models.CharField(max_length=100,null=True)
+    planmaindate=models.CharField(max_length=100,null=True)
+
+
 
 class Shuju(models.Model):
     collecttime=models.DateTimeField(auto_now=True,auto_now_add=False)
