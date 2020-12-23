@@ -373,6 +373,7 @@ class ShujuTest (APIView):
            queryset=models.Shuju.objects.filter(devtype=devtype).order_by('-id').first()
            ser=serializer.ShujuSerializer(queryset)
            return Response(ser.data,headers={"Access-Control-Allow-Origin":"*"})
+       
 
 # sim卡接口
 class Simcard(APIView):
