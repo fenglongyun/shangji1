@@ -13,6 +13,8 @@ import requests
 import json
 from django.db.models import Q
 from django.db.models import Max,Min
+import hashlib
+import requests
 
 
     
@@ -196,7 +198,7 @@ class Device(APIView):
         if not pk: 
             return Response('请求参数错误',headers={"Access-Control-Allow-Origin":"*"})
         elif pk=='all':
-            if userinfo_id==1:
+            if userinfo_id==1 or userinfo_id==19:
                 queryset=models.Device.objects.all().order_by('id')
             else:
                 queryset=models.Device.objects.filter(userinfo_id=userinfo_id).all().order_by('id')
@@ -205,7 +207,7 @@ class Device(APIView):
             ser=serializer.DeviceSerializer(page_data,many=True)
             return page_obj.get_paginated_response(ser.data)
         else:
-            if userinfo_id==1:
+            if userinfo_id==1 or userinfo_id==19:
                 queryset=models.Device.objects.filter(id=pk).first()
             else:
                 queryset=models.Device.objects.filter(userinfo_id=userinfo_id, id=pk).first()
@@ -234,7 +236,7 @@ class Device(APIView):
         pk=kwagrs.get('pk')
         userinfo_id=request.user['id']
         data=request.data
-        if userinfo_id==1:
+        if userinfo_id==1 or userinfo_id==19:
             dev_obj=models.Device.objects.filter(id=pk).first()
         else:
             dev_obj=models.Device.objects.filter(userinfo_id=userinfo_id, id=pk).first()
@@ -252,7 +254,7 @@ class Device(APIView):
     def delete(self,request ,*args, **kwagrs):
         pk=kwagrs.get('pk')
         userinfo_id=request.user['id']
-        if userinfo_id==1:
+        if userinfo_id==1 or userinfo_id==19:
             dev_obj=models.Device.objects.filter(id=pk).first()
         else:
             dev_obj=models.Device.objects.filter(userinfo_id=userinfo_id, id=pk).first()
@@ -269,7 +271,7 @@ class Cncstates(APIView):
     #统计个人所有设备的状态
     def get(self,request,*args, **kwargs):
         userinfo_id=request.user['id']
-        if userinfo_id==1:
+        if userinfo_id==1 or userinfo_id==19:
             devobjs=models.Device.objects.all().values("cncstate").annotate(Count('id'))
         else:
             devobjs=models.Device.objects.filter(userinfo_id=userinfo_id).values("cncstate").annotate(Count('id'))
@@ -348,7 +350,6 @@ class Cameraaddress(APIView):
 
 
 
-
 class Shuju(APIView):
     
     def get(self,request ,*args, **kwagrs):
@@ -360,14 +361,38 @@ class Shuju(APIView):
             ser=serializer.ShujuSerializer(queryset)
             return Response(ser.data,headers={"Access-Control-Allow-Origin":"*"})
 
-
+# 数据测试接口
 class ShujuTest (APIView):
-    def  get(self,request ,*args, **kwagrs):
-         pk=kwargs.get('pk')
-         if not pk:
-            queryset=models.Shuju.objects.filter(id__gt=Max('id') - 10).order_by('id')
-            ser=serializer.ShujuSerializer(queryset)
-            return Response(ser.data,headers={"Access-Control-Allow-Origin":"*"})
+    def get(self,request ,*args, **kwagrs):
+        devtype=kwagrs.get('devtype')
+        if not devtype:
+           queryset=models.Shuju.objects.all().order_by('-id')[:10]
+           ser=serializer.ShujuSerializer(queryset,many=True)
+           return Response(ser.data,headers={"Access-Control-Allow-Origin":"*"})
+        else:
+           queryset=models.Shuju.objects.filter(devtype=devtype).order_by('-id').first()
+           ser=serializer.ShujuSerializer(queryset)
+           return Response(ser.data,headers={"Access-Control-Allow-Origin":"*"})
+
+# sim卡接口
+class Simcard(APIView):
+    def get(self,request ,*args, **kwagrs):
+
+        sid='11951'
+        apikey='13286307b450491f83af2bd3a4f53fce'
+        msisdns='1440461308606'
+        ts='20201125151900'
+
+        data=sid+apikey+ts+msisdns
+        newmd5=hashlib.md5()
+        newmd5.update(data.encode(encoding='utf-8'))
+        sign=newmd5.hexdigest()
+        url='http://106.14.19.179:9011/iotapi/rest/v2/card/usage/current?sid='+ sid +'&sign='+ sign +'&ts='+ts+'&msisdns='+ msisdns
+        # url1='http://106.14.19.179:9011/iotapi/rest/v2/card/pkg/get?sid='+ sid +'&sign='+ sign +'&ts='+ts+'&msisdn='+ msisdns
+        res=requests.get(url)
+        # res1=requests.get(url1)
+        return Response(res.text)
+        
         
          
 
