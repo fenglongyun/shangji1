@@ -188,8 +188,6 @@ class UserList(APIView):
 
 
 
-
-
 class Device(APIView):
     authentication_classes=[JwtAuth]
     def get(self,request ,*args, **kwagrs):

@@ -97,11 +97,11 @@ WSGI_APPLICATION = 'shangji.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'labview',
-        'USER':'user',
-        'PASSWORD':'USSTcyl205@812$%',
-        'HOST':'118.25.152.184',
-        'PORT':'3306',
+        'NAME': 'shangji',
+        'USER':'smtw_tpm',
+        'PASSWORD':'SQtvlAyjJRyG4LoL',
+        'HOST':'49.234.7.115',
+        'PORT':'8080',
     }
 }
 
@@ -142,7 +142,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = 'api/static/'
 
 REST_FRAMEWORK={
     #分页
