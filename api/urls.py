@@ -1,6 +1,7 @@
 from django.conf.urls import url
 from api.views import indexviews
 from api.views.admin import account
+from api.views.device.views import UpdateDevPic 
 from api.views.admin.digitalCockpit import workbench
 
 urlpatterns = [
@@ -20,7 +21,9 @@ urlpatterns = [
     url(r'cncstates/$',indexviews.Cncstates.as_view()),
     url(r'cameraaddress/(?P<pk>\w+)/$',indexviews.Cameraaddress.as_view()),
     url(r'shuju/(?P<devtype>\w+-\w+)/$', indexviews.Shuju.as_view()),
-    
+    url(r'devpic/(?P<pk>\d+)/$', UpdateDevPic.as_view()), #设备图片修改接口
+
+
     url(r'^authorizedusers/$',account.AuthorizedUsers.as_view()),
     url(r'^authorizeduser/(?P<pk>\d+)/$',account.AuthorizedUser.as_view()),
     url(r'^authorizeduser/$',account.AuthorizedUser.as_view()),

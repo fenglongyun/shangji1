@@ -216,9 +216,6 @@ class Device(APIView):
 
     def post(self,request ,*args, **kwagrs):
         data=request.data
-        queryset=models.Device.objects.filter(Q(devnum=data['devnum']) | Q(devtype=data['devtype'])).all()
-        if queryset:
-            return Response({'code':0,'msg':'设备添加失败，资产编号或IOT设备编号有误'},headers={"Access-Control-Allow-Origin":"*"})
         userinfo_id=request.user['id']
         data['userinfo_id']=userinfo_id
         devtype=data.get('devtype')
