@@ -218,6 +218,7 @@ class Device(APIView):
         data=request.data
         userinfo_id=request.user['id']
         data['userinfo_id']=userinfo_id
+        data['cameranum'] = 'D43647351'
         devtype=data.get('devtype')
         queryset1=models.Shuju.objects.filter(devtype=devtype).first()
         if not queryset1:
