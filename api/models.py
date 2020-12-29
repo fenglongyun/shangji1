@@ -106,6 +106,7 @@ class Device(models.Model):
     maintainer=models.CharField(max_length=50,null=True)
     maintencontent=models.CharField(max_length=100,null=True)
     planmaindate=models.CharField(max_length=100,null=True)
+    maintenancestatus=models.CharField(verbose_name='保养状态', max_length=50, null=True, blank=True)
 
 
 
