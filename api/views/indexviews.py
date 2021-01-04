@@ -216,6 +216,9 @@ class Device(APIView):
 
     def post(self,request ,*args, **kwagrs):
         data=request.data
+        queryset = models.Device.objects.filter(Q(devnum=data['devnum'])|Q(devtype=data['devtype']))
+        if queryset:
+            return Response({'code':'0','msg':'设备已存在，添加失败'}, headers={"Access-Control-Allow-Origin":"*"})
         userinfo_id=request.user['id']
         data['userinfo_id']=userinfo_id
         data['cameranum'] = 'D43647351'
@@ -232,6 +235,9 @@ class Device(APIView):
         pk=kwagrs.get('pk')
         userinfo_id=request.user['id']
         data=request.data
+        queryset = models.Device.objects.filter(Q(devnum=data['devnum'])|Q(devtype=data['devtype']))
+        if queryset:
+            return Response({'code':'0','msg':'设备已存在，修改失败'}, headers={"Access-Control-Allow-Origin":"*"})
         if userinfo_id==1 or userinfo_id==19:
             dev_obj=models.Device.objects.filter(id=pk).first()
         else:
@@ -371,24 +377,7 @@ class ShujuTest (APIView):
            return Response(ser.data,headers={"Access-Control-Allow-Origin":"*"})
        
 
-# sim卡接口
-class Simcard(APIView):
-    def get(self,request ,*args, **kwagrs):
 
-        sid='11951'
-        apikey='13286307b450491f83af2bd3a4f53fce'
-        msisdns='1440461308606'
-        ts='20201125151900'
-
-        data=sid+apikey+ts+msisdns
-        newmd5=hashlib.md5()
-        newmd5.update(data.encode(encoding='utf-8'))
-        sign=newmd5.hexdigest()
-        url='http://106.14.19.179:9011/iotapi/rest/v2/card/usage/current?sid='+ sid +'&sign='+ sign +'&ts='+ts+'&msisdns='+ msisdns
-        # url1='http://106.14.19.179:9011/iotapi/rest/v2/card/pkg/get?sid='+ sid +'&sign='+ sign +'&ts='+ts+'&msisdn='+ msisdns
-        res=requests.get(url)
-        # res1=requests.get(url1)
-        return Response(res.text)
         
         
          

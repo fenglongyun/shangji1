@@ -1,5 +1,6 @@
 from django.conf.urls import url
 from api.views import indexviews
+from api.views.simcard.simcard import Simcard
 from api.views.admin import account
 from api.views.device.views import UpdateDevPic 
 from api.views.admin.digitalCockpit import workbench
@@ -37,6 +38,6 @@ urlpatterns = [
     url(r'^shujuTest/(?P<devtype>\w+-\w+)/$', indexviews.ShujuTest.as_view()),
 
     # sim 卡接口：
-    url(r'^simCard/$', indexviews.Simcard.as_view()),
+    url(r'^simCard/$', Simcard.as_view()),
 
 ]
