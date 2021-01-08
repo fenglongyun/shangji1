@@ -2,7 +2,7 @@ from django.conf.urls import url
 from api.views import indexviews
 from api.views.simcard.simcard import Simcard
 from api.views.admin import account
-from api.views.device.views import UpdateDevPic 
+from api.views.device.views import UpdateDevPic, StateDevView 
 from api.views.admin.digitalCockpit import workbench
 
 urlpatterns = [
@@ -39,5 +39,8 @@ urlpatterns = [
 
     # sim 卡接口：
     url(r'^simCard/$', Simcard.as_view()),
+    
 
+    # 设备接口：
+    url(r'^statedev/(?P<cncstate>\w)/$', StateDevView.as_view()),
 ]

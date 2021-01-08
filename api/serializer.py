@@ -56,3 +56,12 @@ class BaoJingSerializer(serializers.ModelSerializer):
     class Meta:
         model=models.Shuju
         fields=['id','devtype','alarmnum']
+
+
+
+
+class StateDevSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Device
+        fields = '__all__'

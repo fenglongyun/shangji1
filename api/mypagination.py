@@ -11,4 +11,8 @@ class MyPagination(PageNumberPagination):
             'count': self.page.paginator.count,
             'pages':self.page.paginator.num_pages,
             'results': data
-        },headers={"Access-Control-Allow-Origin":"*"})
+        },
+        headers={
+            "Access-Control-Allow-Origin":"*"
+            }
+        )
