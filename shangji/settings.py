@@ -101,8 +101,8 @@ DATABASES = {
         'NAME': 'shangji',
         'USER':'smtw_tpm',
         'PASSWORD':'SQtvlAyjJRyG4LoL',
-        'HOST':'172.18.205.30',
-        'PORT':'3306',
+        'HOST':'49.234.7.115',
+        'PORT':'8080',
     }
 }
 

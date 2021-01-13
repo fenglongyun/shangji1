@@ -42,5 +42,5 @@ urlpatterns = [
     
 
     # 设备接口：
-    url(r'^statedev/(?P<cncstate>\w)/$', StateDevView.as_view()),
+    url(r'^statedev/(?P<cncstate>\w+)/(?P<devnum>\w+)/$', StateDevView.as_view()),  #根据cncstate值不同，列出不同状态的设备
 ]

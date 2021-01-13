@@ -235,9 +235,9 @@ class Device(APIView):
         pk=kwagrs.get('pk')
         userinfo_id=request.user['id']
         data=request.data
-        queryset = models.Device.objects.filter(Q(devnum=data['devnum'])|Q(devtype=data['devtype']))
-        if queryset:
-            return Response({'code':'0','msg':'设备已存在，修改失败'}, headers={"Access-Control-Allow-Origin":"*"})
+        # queryset = models.Device.objects.filter(Q(devnum=data['devnum'])|Q(devtype=data['devtype']))
+        # if queryset:
+        #     return Response({'code':'0','msg':'设备已存在，修改失败'}, headers={"Access-Control-Allow-Origin":"*"})
         if userinfo_id==1 or userinfo_id==19:
             dev_obj=models.Device.objects.filter(id=pk).first()
         else:
