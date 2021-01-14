@@ -292,9 +292,9 @@ class BaoJing(APIView):
             c=[y['devtype'] for y in devtypes]
         max_ids=models.Shuju.objects.filter(devtype__in=c).values('devtype').annotate(max1=Max('id'))
         b=[y['max1'] for y in max_ids]
-        queryset=models.Shuju.objects.filter(id__in=b).values('id','devtype','alarmnum','DOCH0','DOCH1','DOCH2','DOCH3','DOCH4')
+        queryset=models.Shuju.objects.filter(id__in=b).values('id','devtype','alarmnum','DO0','DO1','DO2','DO3','DO4')
         for x in queryset:
-            cgqbj=x['DOCH0'] or  x['DOCH1'] or x['DOCH2'] or x['DOCH3'] or x['DOCH4']
+            cgqbj=x['DO0'] or  x['DO1'] or x['DO2'] or x['DO3'] or x['DO4']
             cncbj=x['alarmnum']
             if cgqbj !='' and cgqbj !=None and cncbj != '' and cncbj !=None:
                 x['alarmnum']='传感器和数控系统报警'
